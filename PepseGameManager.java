@@ -1,6 +1,7 @@
 package pepse;
 
 import danogl.GameManager;
+import danogl.GameObject;
 import danogl.collisions.Layer;
 import danogl.gui.*;
 
@@ -9,14 +10,36 @@ import pepse.world.Sky;
 import pepse.world.Terrain;
 import pepse.world.daynight.Night;
 import pepse.world.daynight.Sun;
+import pepse.world.daynight.SunHalo;
 
 /**
  * The Pepse game manager.
  * It manages every part of the game and it's objects.
+ *
+ * @author Noam Cohen
  */
 public class PepseGameManager extends GameManager {
 
-    private static final int cycleLength = 10;
+    private static final int cycleLength = 30;
+
+    // Create the terrain
+    private void createTerrain(WindowController windowController) {
+        Terrain terrain = new Terrain(windowController.getWindowDimensions(), 0);
+        for (Block block : terrain.createInRange(0, (int) windowController.getWindowDimensions().x())) {
+            this.gameObjects().addGameObject(block, Layer.STATIC_OBJECTS);
+        }
+    }
+
+    // Create the day-night cycle - the sun and the night.
+    private void createDayNightCycle(WindowController windowController) {
+        GameObject night = Night.create(windowController.getWindowDimensions(),cycleLength);
+        this.gameObjects().addGameObject(night, Layer.FOREGROUND);
+        GameObject sun = Sun.create(windowController.getWindowDimensions(),cycleLength);
+        this.gameObjects().addGameObject(sun, Layer.BACKGROUND);
+        GameObject sunHalo = SunHalo.create(sun);
+        sunHalo.addComponent(deltaTime -> sunHalo.setCenter(sun.getCenter()));
+        this.gameObjects().addGameObject(sunHalo, Layer.BACKGROUND+1);
+    }
 
     /**
      * Initialize the game.
@@ -42,26 +65,12 @@ public class PepseGameManager extends GameManager {
             WindowController windowController) {
 
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
-
         this.gameObjects().addGameObject(Sky.create(windowController.getWindowDimensions()),
                 Layer.BACKGROUND);
-
-        Terrain terrain = new Terrain(windowController.getWindowDimensions(), 0);
-        // Add the terrain
-        // print the amount of blocks:
-
-        for (Block block : terrain.createInRange(0, 3000)) {
-            this.gameObjects().addGameObject(block, Layer.STATIC_OBJECTS);
-        }
-
-        this.gameObjects().addGameObject(
-                Night.create(windowController.getWindowDimensions(),cycleLength),
-                Layer.FOREGROUND);
-
-        this.gameObjects().addGameObject(
-                Sun.create(windowController.getWindowDimensions(),cycleLength),
-                Layer.BACKGROUND);
+        createTerrain(windowController);
+        createDayNightCycle(windowController);
     }
+
 
     /**
      * The main function.
