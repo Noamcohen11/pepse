@@ -72,7 +72,7 @@ public class PepseGameManager extends GameManager {
         createTerrain(windowController);
         createDayNightCycle(windowController);
         Vector2 initialAvatarPos = new Vector2(
-                windowController.getWindowDimensions().x()-Constants.AVATAR_SIZE,
+                windowController.getWindowDimensions().x()/2-Constants.AVATAR_SIZE,
                 windowController.getWindowDimensions().y()*Constants.DIRT_SKY_RATIO
                         -Constants.AVATAR_SIZE);
         this.gameObjects().addGameObject(
