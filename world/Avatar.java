@@ -3,10 +3,14 @@ package pepse.world;
 import danogl.GameObject;
 import danogl.gui.ImageReader;
 import danogl.gui.UserInputListener;
+import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 import pepse.Constants;
+import danogl.gui.rendering.AnimationRenderable;
 
 import java.awt.event.KeyEvent;
+import java.util.Arrays;
+import java.util.stream.IntStream;
 
 /**
  * The avatar of the game.
@@ -17,7 +21,10 @@ public class Avatar extends GameObject {
     private static final float VELOCITY_X = 400;
     private static final float VELOCITY_Y = -650;
     private static final float GRAVITY = 600;
-    private static final String IDLE_IMAGE = Constants.ASSETS_FOLDER + "/idle_0.png";
+    private static final String[] IDLE_IMAGES =
+            IntStream.range(0, 4).mapToObj(
+                    i -> Constants.ASSETS_FOLDER + "/idle_" + i + ".png").toArray(String[]::new);
+
     private final UserInputListener inputListener;
 
     /**
@@ -29,7 +36,11 @@ public class Avatar extends GameObject {
      */
     public Avatar(Vector2 pos, UserInputListener inputListener, ImageReader imageReader) {
         super(pos, Vector2.ONES.mult(Constants.AVATAR_SIZE),
-                imageReader.readImage(IDLE_IMAGE,true));
+                new AnimationRenderable(
+                        Arrays.stream(IDLE_IMAGES).map(
+                                idleImage -> imageReader.readImage(idleImage, true))
+                                .toArray(Renderable[]::new),
+                        1));
         physics().preventIntersectionsFromDirection(Vector2.ZERO);
         transform().setAccelerationY(GRAVITY);
         this.inputListener = inputListener;
