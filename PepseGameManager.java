@@ -7,12 +7,16 @@ import danogl.gui.*;
 import pepse.world.Block;
 import pepse.world.Sky;
 import pepse.world.Terrain;
+import pepse.world.daynight.Night;
+import pepse.world.daynight.Sun;
 
 /**
  * The Pepse game manager.
  * It manages every part of the game and it's objects.
  */
 public class PepseGameManager extends GameManager {
+
+    private static final int cycleLength = 10;
 
     /**
      * Initialize the game.
@@ -44,13 +48,19 @@ public class PepseGameManager extends GameManager {
 
         Terrain terrain = new Terrain(windowController.getWindowDimensions(), 0);
         // Add the terrain
-        // print the amoun tof blocks:
+        // print the amount of blocks:
 
         for (Block block : terrain.createInRange(0, 3000)) {
             this.gameObjects().addGameObject(block, Layer.STATIC_OBJECTS);
         }
 
+        this.gameObjects().addGameObject(
+                Night.create(windowController.getWindowDimensions(),cycleLength),
+                Layer.FOREGROUND);
 
+        this.gameObjects().addGameObject(
+                Sun.create(windowController.getWindowDimensions(),cycleLength),
+                Layer.BACKGROUND);
     }
 
     /**

@@ -2,6 +2,7 @@ package pepse.world;
 
 import danogl.gui.rendering.RectangleRenderable;
 import danogl.util.Vector2;
+import pepse.Constants;
 import pepse.util.ColorSupplier;
 
 import java.util.ArrayList;
@@ -10,7 +11,6 @@ import java.awt.Color;
 
 public class Terrain {
     private static final int TERRAIN_DEPTH = 20;
-    private static final float DIRT_SKY_RATIO = 2f/3f;
     private static final Color BASE_GROUND_COLOR = new Color(212, 123, 74);
     private final float groundHeightAtX0;
     private static final String BLOCK_TAG = "ground";
@@ -21,7 +21,7 @@ public class Terrain {
      * @param seed The seed for the random number generator.
      */
     public Terrain(Vector2 windowDimensions, int seed){
-        groundHeightAtX0 = windowDimensions.y() * DIRT_SKY_RATIO;
+        groundHeightAtX0 = windowDimensions.y() * Constants.DIRT_SKY_RATIO;
     }
 
     /**
