@@ -4,7 +4,7 @@ import danogl.GameObject;
 import danogl.gui.rendering.OvalRenderable;
 import danogl.util.Vector2;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class SunHalo {
     private static final String SUN_HALO_TAG = "sunHalo";

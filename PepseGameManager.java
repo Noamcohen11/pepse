@@ -5,6 +5,8 @@ import danogl.GameObject;
 import danogl.collisions.Layer;
 import danogl.gui.*;
 
+import danogl.util.Vector2;
+import pepse.world.Avatar;
 import pepse.world.Block;
 import pepse.world.Sky;
 import pepse.world.Terrain;
@@ -69,6 +71,12 @@ public class PepseGameManager extends GameManager {
                 Layer.BACKGROUND);
         createTerrain(windowController);
         createDayNightCycle(windowController);
+        Vector2 initialAvatarPos = new Vector2(
+                windowController.getWindowDimensions().x()-Constants.AVATAR_SIZE,
+                windowController.getWindowDimensions().y()*Constants.DIRT_SKY_RATIO
+                        -Constants.AVATAR_SIZE);
+        this.gameObjects().addGameObject(
+                new Avatar(initialAvatarPos, inputListener, imageReader), Layer.DEFAULT);
     }
 
 
