@@ -13,6 +13,8 @@ import java.awt.Color;
 
 public class Terrain {
     private static final int TERRAIN_DEPTH = 20;
+
+    private static final int NOISE_FACOTR = 7;
     private static final Color BASE_GROUND_COLOR = new Color(212, 123, 74);
     private final float groundHeightAtX0;
     private static final String BLOCK_TAG = "ground";
@@ -26,7 +28,6 @@ public class Terrain {
      */
     public Terrain(Vector2 windowDimensions, int seed){
         groundHeightAtX0 = windowDimensions.y() * Constants.DIRT_SKY_RATIO;
-        noiseGenerator = new NoiseGenerator(seed,(int)groundHeightAtX0);
     }
 
     /**
@@ -35,7 +36,7 @@ public class Terrain {
      * @return The height of the ground at the given x coordinate.
      */
     public float groundHeightAt(float x) {
-        float noise = (float) noiseGenerator.noise(x, Block.SIZE *7);
+        float noise = (float) noiseGenerator.noise(x, Block.SIZE *NOISE_FACOTR);
         // print the noise
         return groundHeightAtX0 + noise; }
 
@@ -51,6 +52,7 @@ public class Terrain {
      */
     public List<Block> createInRange(int minX, int maxX) {
 
+        int statingY = (int) (Math.floor(groundHeightAt(minX) / Block.SIZE) * Block.SIZE);
         int statingX = (int) (Math.floor((float) minX / Block.SIZE) * Block.SIZE);
         List<Block> blocks = new ArrayList<>();
         for (int x = statingX; x < maxX; x += Block.SIZE) {
