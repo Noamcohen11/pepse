@@ -28,6 +28,7 @@ public class Terrain {
      */
     public Terrain(Vector2 windowDimensions, int seed){
         groundHeightAtX0 = windowDimensions.y() * Constants.DIRT_SKY_RATIO;
+        noiseGenerator = new NoiseGenerator(seed, (int)groundHeightAtX0);
     }
 
     /**
@@ -52,7 +53,6 @@ public class Terrain {
      */
     public List<Block> createInRange(int minX, int maxX) {
 
-        int statingY = (int) (Math.floor(groundHeightAt(minX) / Block.SIZE) * Block.SIZE);
         int statingX = (int) (Math.floor((float) minX / Block.SIZE) * Block.SIZE);
         List<Block> blocks = new ArrayList<>();
         for (int x = statingX; x < maxX; x += Block.SIZE) {
