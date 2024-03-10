@@ -6,6 +6,7 @@ import danogl.collisions.Layer;
 import danogl.gui.*;
 
 import danogl.util.Vector2;
+import pepse.ui.EnergyUi;
 import pepse.world.Avatar;
 import pepse.world.Block;
 import pepse.world.Sky;
@@ -22,7 +23,8 @@ import pepse.world.daynight.SunHalo;
  */
 public class PepseGameManager extends GameManager {
 
-    private static final int cycleLength = 30;
+    private static final int CYCLE_LENGTH = 30;
+    private static final int ENERGY_UI_SIZE = 100;
 
     // Create the terrain
     private void createTerrain(WindowController windowController) {
@@ -34,9 +36,9 @@ public class PepseGameManager extends GameManager {
 
     // Create the day-night cycle - the sun and the night.
     private void createDayNightCycle(WindowController windowController) {
-        GameObject night = Night.create(windowController.getWindowDimensions(),cycleLength);
+        GameObject night = Night.create(windowController.getWindowDimensions(),CYCLE_LENGTH);
         this.gameObjects().addGameObject(night, Layer.FOREGROUND);
-        GameObject sun = Sun.create(windowController.getWindowDimensions(),cycleLength);
+        GameObject sun = Sun.create(windowController.getWindowDimensions(),CYCLE_LENGTH);
         this.gameObjects().addGameObject(sun, Layer.BACKGROUND);
         GameObject sunHalo = SunHalo.create(sun);
         sunHalo.addComponent(deltaTime -> sunHalo.setCenter(sun.getCenter()));
@@ -75,8 +77,11 @@ public class PepseGameManager extends GameManager {
                 windowController.getWindowDimensions().x()/2-Constants.AVATAR_SIZE,
                 windowController.getWindowDimensions().y()*Constants.DIRT_SKY_RATIO
                         -Constants.AVATAR_SIZE);
-        this.gameObjects().addGameObject(
-                new Avatar(initialAvatarPos, inputListener, imageReader), Layer.DEFAULT);
+        Avatar avatar = new Avatar(initialAvatarPos, inputListener, imageReader);
+        this.gameObjects().addGameObject(avatar, Layer.DEFAULT);
+        this.gameObjects().addGameObject(new EnergyUi(new Vector2(0,0),
+                new Vector2(ENERGY_UI_SIZE,ENERGY_UI_SIZE),
+                () -> (int) avatar.getEnergy()), Layer.UI);
     }
 
 

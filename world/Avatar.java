@@ -21,11 +21,42 @@ public class Avatar extends GameObject {
     private static final float VELOCITY_X = 400;
     private static final float VELOCITY_Y = -650;
     private static final float GRAVITY = 600;
+
+    private static final float ENERGY_GAIN = 1;
+    private static final float ENERGY_RUN_LOSE = 0.5f;
+    private static final float ENERGY_JUMP_LOSE = 10;
+    private static final float MAX_ENERGY = 100;
     private static final String[] IDLE_IMAGES =
             IntStream.range(0, 4).mapToObj(
                     i -> Constants.ASSETS_FOLDER + "/idle_" + i + ".png").toArray(String[]::new);
 
     private final UserInputListener inputListener;
+
+    private float energy;
+
+    // Update the x velocity of the avatar.
+    private float updateVelocityX() {
+        float xVel = 0;
+        if (energy > ENERGY_RUN_LOSE) {
+            if (inputListener.isKeyPressed(KeyEvent.VK_LEFT))
+                xVel -= VELOCITY_X;
+            if (inputListener.isKeyPressed(KeyEvent.VK_RIGHT))
+                xVel += VELOCITY_X;
+            if (xVel != 0) {
+                energy -= ENERGY_RUN_LOSE;
+            }
+        }
+        return xVel;
+    }
+    // Update the y velocity of the avatar.
+    private void updateVelocityY() {
+        if (energy > ENERGY_JUMP_LOSE) {
+            if (inputListener.isKeyPressed(KeyEvent.VK_SPACE) && getVelocity().y() == 0) {
+                transform().setVelocityY(VELOCITY_Y);
+                energy -= ENERGY_JUMP_LOSE;
+            }
+        }
+    }
 
     /**
      * Create the avatar.
@@ -44,6 +75,8 @@ public class Avatar extends GameObject {
         physics().preventIntersectionsFromDirection(Vector2.ZERO);
         transform().setAccelerationY(GRAVITY);
         this.inputListener = inputListener;
+
+        energy = MAX_ENERGY;
     }
 
     /**
@@ -54,13 +87,26 @@ public class Avatar extends GameObject {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        float xVel = 0;
-        if(inputListener.isKeyPressed(KeyEvent.VK_LEFT))
-            xVel -= VELOCITY_X;
-        if(inputListener.isKeyPressed(KeyEvent.VK_RIGHT))
-            xVel += VELOCITY_X;
+        float xVel = updateVelocityX();
         transform().setVelocityX(xVel);
-        if(inputListener.isKeyPressed(KeyEvent.VK_SPACE) && getVelocity().y() == 0)
-            transform().setVelocityY(VELOCITY_Y);
+        updateVelocityY();
+        if (getVelocity().x() == 0 && getVelocity().y() == 0) {
+            energy += ENERGY_GAIN;
+        }
+        if (energy > MAX_ENERGY) {
+            energy = MAX_ENERGY;
+        }
     }
+
+    /**
+     *  Get the energy of the avatar.
+     *
+     * @return The energy of the avatar.
+     */
+    public float getEnergy() {
+        return energy;
+    }
+
+
+
 }
