@@ -14,6 +14,9 @@ import pepse.world.Terrain;
 import pepse.world.daynight.Night;
 import pepse.world.daynight.Sun;
 import pepse.world.daynight.SunHalo;
+import pepse.world.trees.Flora;
+import pepse.world.trees.Leaf;
+import pepse.world.trees.Tree;
 
 /**
  * The Pepse game manager.
@@ -25,10 +28,11 @@ public class PepseGameManager extends GameManager {
 
     private static final int CYCLE_LENGTH = 30;
     private static final int ENERGY_UI_SIZE = 100;
+    private Terrain terrain;
 
     // Create the terrain
     private void createTerrain(WindowController windowController) {
-        Terrain terrain = new Terrain(windowController.getWindowDimensions(), 0);
+        terrain = new Terrain(windowController.getWindowDimensions(), 0);
         for (Block block : terrain.createInRange(0, (int) windowController.getWindowDimensions().x())) {
             this.gameObjects().addGameObject(block, Layer.STATIC_OBJECTS);
         }
@@ -43,6 +47,18 @@ public class PepseGameManager extends GameManager {
         GameObject sunHalo = SunHalo.create(sun);
         sunHalo.addComponent(deltaTime -> sunHalo.setCenter(sun.getCenter()));
         this.gameObjects().addGameObject(sunHalo, Layer.BACKGROUND+1);
+    }
+
+    // Create the flora
+    private void createFlora(WindowController windowController) {
+        // Create the flora
+        Flora flora = new Flora(terrain::groundHeightAt);
+        for (Tree tree : flora.createInRange(0, (int) windowController.getWindowDimensions().x())) {
+            this.gameObjects().addGameObject(tree.trunk(), Layer.STATIC_OBJECTS);
+            for (Leaf leaf : tree.leaves()) {
+                this.gameObjects().addGameObject(leaf, Layer.FOREGROUND);
+            }
+        }
     }
 
     /**
@@ -72,6 +88,7 @@ public class PepseGameManager extends GameManager {
         this.gameObjects().addGameObject(Sky.create(windowController.getWindowDimensions()),
                 Layer.BACKGROUND);
         createTerrain(windowController);
+        createFlora(windowController);
         createDayNightCycle(windowController);
         Vector2 initialAvatarPos = new Vector2(
                 windowController.getWindowDimensions().x()/2-Constants.AVATAR_SIZE,

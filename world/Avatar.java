@@ -38,12 +38,15 @@ public class Avatar extends GameObject {
 
     private final UserInputListener inputListener;
     private final ImageReader imageReader;
-
     private float energy;
-
     private Renderable idleRenderable;
     private Renderable runRenderable;
     private Renderable jumpRenderable;
+    private boolean direction;
+
+    private static final boolean LEFT = false;
+    private static final boolean RIGHT = true;
+
 
     // Update the x velocity of the avatar.
     private float updateVelocityX() {
@@ -108,6 +111,7 @@ public class Avatar extends GameObject {
         this.imageReader = imageReader;
         energy = MAX_ENERGY;
         initRenderables();
+        direction = LEFT;
     }
 
     /**
@@ -131,6 +135,9 @@ public class Avatar extends GameObject {
         else {avatarRender = jumpRenderable;}
         if (energy > MAX_ENERGY) {energy = MAX_ENERGY; }
         renderer().setRenderable(avatarRender);
+        if (xVel < 0) {direction = RIGHT;}
+        else if (xVel > 0) {direction = LEFT;}
+        renderer().setIsFlippedHorizontally(direction);
     }
 
     /**
