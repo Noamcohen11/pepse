@@ -44,7 +44,7 @@ public class EnergyUi extends GameObject {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        TextRenderable energyUi = new TextRenderable(Integer.toString(energySupplier.get()));;
+        TextRenderable energyUi = new TextRenderable(Integer.toString(energySupplier.get()));
         energyUi.setColor(Color.BLACK);
         renderer().setRenderable(energyUi);
     }
