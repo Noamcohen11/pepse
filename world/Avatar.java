@@ -29,10 +29,21 @@ public class Avatar extends GameObject {
     private static final String[] IDLE_IMAGES =
             IntStream.range(0, 4).mapToObj(
                     i -> Constants.ASSETS_FOLDER + "/idle_" + i + ".png").toArray(String[]::new);
+    private static final String[] RUN_IMAGES =
+            IntStream.range(0, 6).mapToObj(
+                    i -> Constants.ASSETS_FOLDER + "/run_" + i + ".png").toArray(String[]::new);
+    private static final String[] JUMP_IMAGES =
+            IntStream.range(0, 4).mapToObj(
+                    i -> Constants.ASSETS_FOLDER + "/jump_" + i + ".png").toArray(String[]::new);
 
     private final UserInputListener inputListener;
+    private final ImageReader imageReader;
 
     private float energy;
+
+    private Renderable idleRenderable;
+    private Renderable runRenderable;
+    private Renderable jumpRenderable;
 
     // Update the x velocity of the avatar.
     private float updateVelocityX() {
@@ -58,6 +69,25 @@ public class Avatar extends GameObject {
         }
     }
 
+    // Initialize the renderables of the avatar.
+    private void initRenderables() {
+        idleRenderable = new AnimationRenderable(
+                Arrays.stream(IDLE_IMAGES).map(
+                                idleImage -> imageReader.readImage(idleImage, true))
+                        .toArray(Renderable[]::new),
+                1);
+        runRenderable = new AnimationRenderable(
+                        Arrays.stream(RUN_IMAGES).map(
+                                runImage -> imageReader.readImage(runImage, true))
+                        .toArray(Renderable[]::new),
+                1);
+        jumpRenderable = new AnimationRenderable(
+                Arrays.stream(JUMP_IMAGES).map(
+                                jumpImage -> imageReader.readImage(jumpImage, true))
+                        .toArray(Renderable[]::new),
+                1);
+    }
+
     /**
      * Create the avatar.
      *
@@ -75,8 +105,9 @@ public class Avatar extends GameObject {
         physics().preventIntersectionsFromDirection(Vector2.ZERO);
         transform().setAccelerationY(GRAVITY);
         this.inputListener = inputListener;
-
+        this.imageReader = imageReader;
         energy = MAX_ENERGY;
+        initRenderables();
     }
 
     /**
@@ -87,15 +118,19 @@ public class Avatar extends GameObject {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
+        Renderable avatarRender;
+
         float xVel = updateVelocityX();
         transform().setVelocityX(xVel);
         updateVelocityY();
         if (getVelocity().x() == 0 && getVelocity().y() == 0) {
             energy += ENERGY_GAIN;
+            avatarRender = idleRenderable;
         }
-        if (energy > MAX_ENERGY) {
-            energy = MAX_ENERGY;
-        }
+        else if (getVelocity().x() != 0) {avatarRender = runRenderable;}
+        else {avatarRender = jumpRenderable;}
+        if (energy > MAX_ENERGY) {energy = MAX_ENERGY; }
+        renderer().setRenderable(avatarRender);
     }
 
     /**
@@ -107,6 +142,7 @@ public class Avatar extends GameObject {
         return energy;
     }
 
-
-
+    public void addEnergy(float addedEnergy) {
+        energy += addedEnergy;
+    }
 }

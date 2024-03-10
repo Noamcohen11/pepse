@@ -87,7 +87,9 @@ public class PepseGameManager extends GameManager {
 
     /**
      * The main function.
-     * 
+     *
+     *
+     *
      * @param args The command line arguments. - numOfBrickRows, bricksPerRow.
      */
     public static void main(String[] args) {
