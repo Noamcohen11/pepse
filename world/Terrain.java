@@ -26,7 +26,7 @@ public class Terrain {
      * @param windowDimensions The dimensions of the window.
      * @param seed The seed for the random number generator.
      */
-    public Terrain(Vector2 windowDimensions, int seed){
+    public Terrain(Vector2 windowDimensions, double seed){
         groundHeightAtX0 = windowDimensions.y() * Constants.DIRT_SKY_RATIO;
         noiseGenerator = new NoiseGenerator(seed, (int)groundHeightAtX0);
     }

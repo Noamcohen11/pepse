@@ -32,7 +32,7 @@ public class PepseGameManager extends GameManager {
 
     // Create the terrain
     private void createTerrain(WindowController windowController) {
-        terrain = new Terrain(windowController.getWindowDimensions(), 0);
+        terrain = new Terrain(windowController.getWindowDimensions(), Math.random());
         for (Block block : terrain.createInRange(0, (int) windowController.getWindowDimensions().x())) {
             this.gameObjects().addGameObject(block, Layer.STATIC_OBJECTS);
         }
