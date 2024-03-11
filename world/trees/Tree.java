@@ -1,5 +1,7 @@
 package pepse.world.trees;
 
+import pepse.world.Block;
+
 import java.util.ArrayList;
 
 /**
@@ -8,8 +10,8 @@ import java.util.ArrayList;
  * @author Noam Cohen and Gilad Omesi
  */
 public class Tree {
-    private final Trunk trunk;
-    private final ArrayList<Leaf> leaves;
+    private final Block trunk;
+    private final ArrayList<Block> leaves;
 
 
     /**
@@ -18,7 +20,7 @@ public class Tree {
      * @param trunk The trunk of the tree.
      * @param leafs The leaves of the tree.
      */
-    public Tree(Trunk trunk, ArrayList<Leaf> leafs) {
+    public Tree(Block trunk, ArrayList<Block> leafs) {
         this.trunk = trunk;
         this.leaves = leafs;
     }
@@ -28,7 +30,7 @@ public class Tree {
      *
      * @return The trunk of the tree.
      */
-    public Trunk trunk() {
+    public Block trunk() {
         return trunk;
     }
 
@@ -37,7 +39,7 @@ public class Tree {
      *
      * @return The leaves of the tree.
      */
-    public ArrayList<Leaf> leaves() {
+    public ArrayList<Block> leaves() {
         return leaves;
     }
 }

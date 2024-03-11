@@ -15,6 +15,7 @@ import java.util.function.Supplier;
  */
 public class EnergyUi extends GameObject {
     private final Supplier<Integer> energySupplier;
+    private static final String PERCENTAGE = "%";
 
     /**
      * Create the energy UI.
@@ -26,7 +27,7 @@ public class EnergyUi extends GameObject {
      */
     public EnergyUi(Vector2 topLeftCorner, Vector2 dimensions, Supplier<Integer> energySupplier) {
         super(topLeftCorner, dimensions,
-                new TextRenderable(Integer.toString(energySupplier.get())));
+                new TextRenderable(Integer.toString(energySupplier.get()) + PERCENTAGE));
 
         this.energySupplier = energySupplier;
     }
@@ -44,7 +45,8 @@ public class EnergyUi extends GameObject {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        TextRenderable energyUi = new TextRenderable(Integer.toString(energySupplier.get()));
+        TextRenderable energyUi =
+                new TextRenderable(Integer.toString(energySupplier.get()) + PERCENTAGE);
         energyUi.setColor(Color.BLACK);
         renderer().setRenderable(energyUi);
     }

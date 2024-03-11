@@ -1,8 +1,11 @@
 package pepse.world.trees;
 
+import danogl.gui.rendering.RectangleRenderable;
 import danogl.util.Vector2;
+import pepse.util.ColorSupplier;
 import pepse.world.Block;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.function.Function;
 
@@ -15,6 +18,8 @@ import java.util.function.Function;
 public class Flora  {
     private final Function<Float,Float> GetTreePosition;
     private static final Vector2 TRUNK_DIMENSIONS = new Vector2(Block.SIZE, 300);
+    private static final Color LEAF_COLOR = new Color(50, 200, 30);
+    private static final Color TRUNK_COLOR = new Color(100, 50, 20);
     private static final int LEAVES_IN_ROW = 10;
     private static final float ODDS_OF_TREE = 1f/10;
     private static final float ODDS_OF_LEAF = 1f/2;
@@ -23,13 +28,17 @@ public class Flora  {
 
         Vector2 trunkTopLeftCorner = new Vector2(
                 bottomLeftCorner.x(),
-                bottomLeftCorner.y() - TRUNK_DIMENSIONS.y());
+                bottomLeftCorner.y() - (TRUNK_DIMENSIONS.y()+Block.SIZE)/2);
         Tree tree =
-                new Tree(new Trunk(trunkTopLeftCorner, TRUNK_DIMENSIONS), new ArrayList<>());
+                new Tree(new Block(trunkTopLeftCorner,
+                        new RectangleRenderable(ColorSupplier.approximateColor(TRUNK_COLOR))),
+                        new ArrayList<>());
+        tree.trunk().setDimensions(TRUNK_DIMENSIONS);
         // Create a LEAVES_SIZE by LEAVES_SIZE grid of leaves.
         Vector2 leafsTopLeftCorner = new Vector2(
                 trunkTopLeftCorner.x() - (Block.SIZE * LEAVES_IN_ROW - TRUNK_DIMENSIONS.x()) / 2,
-                trunkTopLeftCorner.y() - (float) (Block.SIZE * LEAVES_IN_ROW) / 2);
+                bottomLeftCorner.y()-TRUNK_DIMENSIONS.y() -
+                        (float) (Block.SIZE * LEAVES_IN_ROW) / 2);
         for (int i = 0; i < LEAVES_IN_ROW; i++) {
             for (int j = 0; j < LEAVES_IN_ROW; j++) {
                 if (Math.random() > ODDS_OF_LEAF) {
@@ -38,7 +47,8 @@ public class Flora  {
                 Vector2 leafTopLeftCorner = new Vector2(
                         leafsTopLeftCorner.x() + i * Block.SIZE,
                         leafsTopLeftCorner.y() + j * Block.SIZE);
-                tree.leaves().add(new Leaf(leafTopLeftCorner));
+                tree.leaves().add(new Block(leafTopLeftCorner,
+                        new RectangleRenderable(ColorSupplier.approximateColor(LEAF_COLOR))));
             }
         }
         return tree;

@@ -15,7 +15,6 @@ import pepse.world.daynight.Night;
 import pepse.world.daynight.Sun;
 import pepse.world.daynight.SunHalo;
 import pepse.world.trees.Flora;
-import pepse.world.trees.Leaf;
 import pepse.world.trees.Tree;
 
 /**
@@ -27,7 +26,8 @@ import pepse.world.trees.Tree;
 public class PepseGameManager extends GameManager {
 
     private static final int CYCLE_LENGTH = 30;
-    private static final int ENERGY_UI_SIZE = 100;
+    private static final int ENERGY_UI_SIZE = 50;
+    private static final int TREE_ZONE_START = Constants.AVATAR_SIZE+3*Block.SIZE;
     private Terrain terrain;
 
     // Create the terrain
@@ -53,9 +53,9 @@ public class PepseGameManager extends GameManager {
     private void createFlora(WindowController windowController) {
         // Create the flora
         Flora flora = new Flora(terrain::groundHeightAt);
-        for (Tree tree : flora.createInRange(0, (int) windowController.getWindowDimensions().x())) {
+        for (Tree tree : flora.createInRange(TREE_ZONE_START, (int) windowController.getWindowDimensions().x())) {
             this.gameObjects().addGameObject(tree.trunk(), Layer.STATIC_OBJECTS);
-            for (Leaf leaf : tree.leaves()) {
+            for (GameObject leaf : tree.leaves()) {
                 this.gameObjects().addGameObject(leaf, Layer.FOREGROUND);
             }
         }
@@ -88,17 +88,16 @@ public class PepseGameManager extends GameManager {
         this.gameObjects().addGameObject(Sky.create(windowController.getWindowDimensions()),
                 Layer.BACKGROUND);
         createTerrain(windowController);
-        createFlora(windowController);
-        createDayNightCycle(windowController);
         Vector2 initialAvatarPos = new Vector2(
-                windowController.getWindowDimensions().x()/2-Constants.AVATAR_SIZE,
-                windowController.getWindowDimensions().y()*Constants.DIRT_SKY_RATIO
-                        -Constants.AVATAR_SIZE);
+                Constants.AVATAR_SIZE,
+                terrain.groundHeightAt(Constants.AVATAR_SIZE) - Constants.AVATAR_SIZE);
         Avatar avatar = new Avatar(initialAvatarPos, inputListener, imageReader);
         this.gameObjects().addGameObject(avatar, Layer.DEFAULT);
         this.gameObjects().addGameObject(new EnergyUi(new Vector2(0,0),
                 new Vector2(ENERGY_UI_SIZE,ENERGY_UI_SIZE),
                 () -> (int) avatar.getEnergy()), Layer.UI);
+        createFlora(windowController);
+        createDayNightCycle(windowController);
     }
 
 
