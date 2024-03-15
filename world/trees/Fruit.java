@@ -9,19 +9,18 @@ import pepse.Constants;
 import pepse.util.ColorSupplier;
 
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.Random;
 
 /**
  * A fruit that can be eaten by the avatar.
  */
-public class Fruit extends GameObject {
-    private static final String TAG = "fruit";
-    private static final Color FRUIT_COLOR = new Color(227, 255, 100);
+public class Fruit extends GameObject implements PropertyChangeListener {
     private static final int SIZE = 20;
-    private static final int ENERGY_GAIN = 10;
     private boolean isActive = true;
-    private PropertyChangeSupport support;
+    private final PropertyChangeSupport support;
 
     /**
      * Create a Fruit.
@@ -29,12 +28,18 @@ public class Fruit extends GameObject {
      * @param topLeftCorner The top left corner of the block.
      */
     public Fruit(Vector2 topLeftCorner) {
-        super(topLeftCorner, Vector2.ONES.mult(SIZE), new OvalRenderable(ColorSupplier.approximateColor(FRUIT_COLOR)));
+        super(topLeftCorner, Vector2.ONES.mult(SIZE),
+                new OvalRenderable(ColorSupplier.approximateColor(Color.RED)));
 
-        this.setTag(TAG);
+        this.setTag(Constants.FRUIT_TAG);
         support = new PropertyChangeSupport(this);
     }
 
+    /**
+     * Add a property change listener.
+     *
+     * @param pcl The property change listener to add.
+     */
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
         support.addPropertyChangeListener(pcl);
     }
@@ -51,21 +56,54 @@ public class Fruit extends GameObject {
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
         if (other.getTag().equals(Constants.AVATAR_TAG) && isActive) {
-            support.firePropertyChange("FruitEaten", null, null);
+            support.firePropertyChange(Constants.AVATAR_EAT_FRUIT_EVENT, null, null);
             this.hideFruit();
         }
     }
 
-    // Show the fruit after a certain time.
+    // Show the fruit
     private void showFruit() {
         isActive = true;
-        this.renderer().setRenderable(new OvalRenderable(ColorSupplier.approximateColor(FRUIT_COLOR)));
+        this.renderer().setRenderable(new OvalRenderable(ColorSupplier.approximateColor(getRandomFruitColor())));
     }
 
-    // Hide the fruit after a certain time.
+    // Hide the fruit for a certain time.
     private void hideFruit() {
         isActive = false;
         this.renderer().setRenderable(null);
         new ScheduledTask(this, Constants.CYCLE_LENGTH, true, this::showFruit);
+    }
+
+    /**
+     * Called when an event occurs.
+     * This is called when the avatar jumps.
+     * It changes the color of the fruit.
+     *
+     * @param evt The event that occurred.
+     */
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (Constants.AVATAR_JUMP_EVENT.equals(evt.getPropertyName()) && isActive) {
+            this.renderer().setRenderable(new OvalRenderable(ColorSupplier.approximateColor(getRandomFruitColor())));
+        }
+    }
+
+    // Get a random color for the fruit.
+    private Color getRandomFruitColor() {
+        Random random = new Random();
+        boolean isRedApple = random.nextBoolean();
+
+        int red, green, blue;
+
+        if (isRedApple) {
+            red = 100 + random.nextInt(156);
+            green = 50 + random.nextInt(206);
+        } else {
+            red = 50 + random.nextInt(151);
+            green = 150 + random.nextInt(106);
+        }
+        blue = random.nextInt(51);
+
+        return new Color(red, green, blue);
     }
 }

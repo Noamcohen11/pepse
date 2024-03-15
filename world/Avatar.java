@@ -13,6 +13,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 /**
  * The avatar of the game.
@@ -20,10 +21,10 @@ import java.beans.PropertyChangeListener;
  * @author Noam Cohen and Gilad Omesi
  */
 public class Avatar extends GameObject implements PropertyChangeListener {
+    private final PropertyChangeSupport support;
     private static final float VELOCITY_X = 400;
     private static final float VELOCITY_Y = -650;
     private static final float GRAVITY = 600;
-
     private static final float ENERGY_GAIN = 1;
     private static final float ENERGY_RUN_LOSE = 0.5f;
     private static final float ENERGY_JUMP_LOSE = 10;
@@ -45,7 +46,6 @@ public class Avatar extends GameObject implements PropertyChangeListener {
     private Renderable runRenderable;
     private Renderable jumpRenderable;
     private boolean direction;
-
     private static final boolean LEFT = false;
     private static final boolean RIGHT = true;
 
@@ -71,6 +71,7 @@ public class Avatar extends GameObject implements PropertyChangeListener {
             if (inputListener.isKeyPressed(KeyEvent.VK_SPACE) && getVelocity().y() == 0) {
                 transform().setVelocityY(VELOCITY_Y);
                 energy -= ENERGY_JUMP_LOSE;
+                support.firePropertyChange(Constants.AVATAR_JUMP_EVENT, null, null);
             }
         }
     }
@@ -116,6 +117,16 @@ public class Avatar extends GameObject implements PropertyChangeListener {
         initRenderables();
         direction = LEFT;
         setTag(Constants.AVATAR_TAG);
+        support = new PropertyChangeSupport(this);
+    }
+
+    /**
+     * Add a property change listener.
+     *
+     * @param pcl The property change listener to add.
+     */
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        support.addPropertyChangeListener(pcl);
     }
 
     /**
@@ -135,18 +146,13 @@ public class Avatar extends GameObject implements PropertyChangeListener {
             energy += ENERGY_GAIN;
             avatarRender = idleRenderable;
         } else if (getVelocity().x() != 0) {
-            avatarRender = runRenderable;
-        } else {
-            avatarRender = jumpRenderable;
-        }
+            avatarRender = runRenderable;} else {
+            avatarRender = jumpRenderable;}
         if (energy > MAX_ENERGY) {
-            energy = MAX_ENERGY;
-        }
+            energy = MAX_ENERGY;}
         renderer().setRenderable(avatarRender);
-        if (xVel < 0) {
-            direction = RIGHT;
-        } else if (xVel > 0) {
-            direction = LEFT;
+        if (xVel < 0) { direction = RIGHT;
+        } else if (xVel > 0) { direction = LEFT;
         }
         renderer().setIsFlippedHorizontally(direction);
     }
@@ -174,14 +180,14 @@ public class Avatar extends GameObject implements PropertyChangeListener {
     }
 
     /**
-     * Set the energy of the avatar.
+     * Add energy to the avatar.
      *
      * @param evt A PropertyChangeEvent object describing the event source
      *            and the property that has changed.
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if ("FruitEaten".equals(evt.getPropertyName())) {
+        if (Constants.AVATAR_EAT_FRUIT_EVENT.equals(evt.getPropertyName())) {
             addEnergy(10);
         }
     }

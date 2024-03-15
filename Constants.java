@@ -23,10 +23,29 @@ public class Constants {
      * The tag of the avatar.
      */
     public static final String AVATAR_TAG = "avatar";
-
+    /**
+     * The tag of the block.
+     */
+    public static final String BLOCK_TAG = "block";
+    /**
+     * The tag of the fruit.
+     */
+    public static final String FRUIT_TAG = "fruit";
+    /**
+     * The tag of the leaf.
+     */
+    public static final String LEAF_TAG = "leaf";
     /**
      * The length of the day-night cycle.
      */
     public static final int CYCLE_LENGTH = 30;
 
+    /**
+     * Event that is fired when the avatar eats a fruit.
+     */
+    public static final String AVATAR_EAT_FRUIT_EVENT = "avatarEatFruit";
+    /**
+     * Event that is fired when the avatar jumps.
+     */
+    public static final String AVATAR_JUMP_EVENT = "avatarJump";
 }

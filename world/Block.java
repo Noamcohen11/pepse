@@ -4,6 +4,7 @@ import danogl.GameObject;
 import danogl.components.GameObjectPhysics;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
+import pepse.Constants;
 
 /**
  * A block.
@@ -24,6 +25,7 @@ public class Block extends GameObject {
      */
     public Block(Vector2 topLeftCorner, Renderable renderable) {
         super(topLeftCorner, Vector2.ONES.mult(SIZE), renderable);
+        this.setTag(Constants.BLOCK_TAG);
         physics().preventIntersectionsFromDirection(Vector2.ZERO);
         physics().setMass(GameObjectPhysics.IMMOVABLE_MASS);
     }
