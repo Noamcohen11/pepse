@@ -17,6 +17,8 @@ import java.awt.Color;
  */
 public class Night {
     private static final String NIGHT_TAG = "night";
+    private static final float NIGHT_OPACITY = 0.5f;
+    private static final float DAY_OPACITY = 0f;
 
     /**
      * Create the night.
@@ -38,7 +40,7 @@ public class Night {
         new Transition<>(
                 night,
                 night.renderer()::setOpaqueness,
-                0f, 0.5f,
+                DAY_OPACITY, NIGHT_OPACITY,
                 Transition.CUBIC_INTERPOLATOR_FLOAT,
                 cycleLength / 2,
                 Transition.TransitionType.TRANSITION_BACK_AND_FORTH,

@@ -14,7 +14,7 @@ public class NoiseGenerator {
      *
      * @param startPoint is a relative point that the noise will be generated from.
      *                   In our case it should be your ground height at X0 (specified in
-     *                   ex4 when we talk about the terrain: 2.2.1).
+     *                   ex4.jar when we talk about the terrain: 2.2.1).
      *
      */
     public NoiseGenerator(double seed, int startPoint) {

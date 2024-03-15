@@ -28,6 +28,7 @@ public class Avatar extends GameObject implements PropertyChangeListener {
     private static final float ENERGY_GAIN = 1;
     private static final float ENERGY_RUN_LOSE = 0.5f;
     private static final float ENERGY_JUMP_LOSE = 10;
+    private static final float FRUIT_ENERGY = 10;
     private static final float MAX_ENERGY = 100;
     private static final String[] IDLE_IMAGES =
             IntStream.range(0, 4).mapToObj(
@@ -145,15 +146,13 @@ public class Avatar extends GameObject implements PropertyChangeListener {
         if (getVelocity().x() == 0 && getVelocity().y() == 0) {
             energy += ENERGY_GAIN;
             avatarRender = idleRenderable;
-        } else if (getVelocity().x() != 0) {
-            avatarRender = runRenderable;} else {
-            avatarRender = jumpRenderable;}
+        } else if (getVelocity().x() != 0) {avatarRender = runRenderable;
+        } else {avatarRender = jumpRenderable;}
         if (energy > MAX_ENERGY) {
             energy = MAX_ENERGY;}
         renderer().setRenderable(avatarRender);
-        if (xVel < 0) { direction = RIGHT;
-        } else if (xVel > 0) { direction = LEFT;
-        }
+        if (xVel < 0) {direction = RIGHT;
+        } else if (xVel > 0) {direction = LEFT;}
         renderer().setIsFlippedHorizontally(direction);
     }
 
@@ -188,7 +187,7 @@ public class Avatar extends GameObject implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (Constants.AVATAR_EAT_FRUIT_EVENT.equals(evt.getPropertyName())) {
-            addEnergy(10);
+            addEnergy(FRUIT_ENERGY);
         }
     }
 }

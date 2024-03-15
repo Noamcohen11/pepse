@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.Color;
 
-
+/**
+ * The terrain of the game.
+ */
 public class Terrain {
     private static final int TERRAIN_DEPTH = 20;
 
@@ -23,23 +25,26 @@ public class Terrain {
 
     /**
      * Create a terrain.
+     *
      * @param windowDimensions The dimensions of the window.
-     * @param seed The seed for the random number generator.
+     * @param seed             The seed for the random number generator.
      */
-    public Terrain(Vector2 windowDimensions, double seed){
+    public Terrain(Vector2 windowDimensions, double seed) {
         groundHeightAtX0 = windowDimensions.y() * Constants.DIRT_SKY_RATIO;
-        noiseGenerator = new NoiseGenerator(seed, (int)groundHeightAtX0);
+        noiseGenerator = new NoiseGenerator(seed, (int) groundHeightAtX0);
     }
 
     /**
      * Returns the height of the ground at the given x coordinate.
+     *
      * @param x The x coordinate.
      * @return The height of the ground at the given x coordinate.
      */
     public float groundHeightAt(float x) {
-        float noise = (float) noiseGenerator.noise(x, Constants.BLOCK_SIZE *NOISE_FACOTR);
+        float noise = (float) noiseGenerator.noise(x, Constants.BLOCK_SIZE * NOISE_FACOTR);
         // print the noise
-        return groundHeightAtX0 + noise; }
+        return groundHeightAtX0 + noise;
+    }
 
     /**
      * Create the terrain in the given range.
@@ -56,9 +61,9 @@ public class Terrain {
         int statingX = (int) (Math.floor((float) minX / Constants.BLOCK_SIZE) * Constants.BLOCK_SIZE);
         List<Block> blocks = new ArrayList<>();
         for (int x = statingX; x < maxX; x += Constants.BLOCK_SIZE) {
-            float statingY = (float)(Math.floor(groundHeightAt(x) / Constants.BLOCK_SIZE) * Constants.BLOCK_SIZE);
+            float statingY = (float) (Math.floor(groundHeightAt(x) / Constants.BLOCK_SIZE) * Constants.BLOCK_SIZE);
             for (float y = statingY;
-                 y < statingY + TERRAIN_DEPTH*Constants.BLOCK_SIZE; y += Constants.BLOCK_SIZE) {
+                 y < statingY + TERRAIN_DEPTH * Constants.BLOCK_SIZE; y += Constants.BLOCK_SIZE) {
                 Block dirt = new Block(new Vector2(x, y),
                         new RectangleRenderable(ColorSupplier.approximateColor(BASE_GROUND_COLOR)));
                 dirt.setTag(BLOCK_TAG);

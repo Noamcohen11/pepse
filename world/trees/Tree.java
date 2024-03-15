@@ -25,6 +25,7 @@ public class Tree implements PropertyChangeListener {
     private static final Vector2 TRUNK_DIMENSIONS = new Vector2(Constants.BLOCK_SIZE, 300);
     private static final float ODDS_OF_LEAF = 1f / 2;
     private static final float ODDS_OF_FRUIT = 1f / 4;
+    private static final int COLOR_DELTA = 50;
 
 
     /**
@@ -39,7 +40,7 @@ public class Tree implements PropertyChangeListener {
                 bottomLeftCorner.x(),
                 bottomLeftCorner.y() - (TRUNK_DIMENSIONS.y() + Constants.BLOCK_SIZE) / 2);
         this.trunk = new Block(trunkTopLeftCorner,
-                new RectangleRenderable(ColorSupplier.approximateColor(BASIC_TRUNK_COLOR, 50)));
+                new RectangleRenderable(ColorSupplier.approximateColor(BASIC_TRUNK_COLOR, COLOR_DELTA)));
         this.trunk.setDimensions(TRUNK_DIMENSIONS);
         this.leaves = leafs;
         this.fruits = fruits;
@@ -107,7 +108,7 @@ public class Tree implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         if (Constants.AVATAR_JUMP_EVENT.equals(evt.getPropertyName())) {
             this.trunk().renderer().setRenderable(new RectangleRenderable(
-                    ColorSupplier.approximateColor(BASIC_TRUNK_COLOR, 50)));
+                    ColorSupplier.approximateColor(BASIC_TRUNK_COLOR, COLOR_DELTA)));
         }
     }
 }

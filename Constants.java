@@ -22,7 +22,7 @@ public class Constants {
     /**
      * The folder of the assets.
      */
-    public static final String ASSETS_FOLDER = "assets";
+    public static final String ASSETS_FOLDER = "../assets";
     /**
      * The tag of the avatar.
      */

@@ -2,9 +2,9 @@ gilad.omesi,noam.cohen11
 319011961,318776739
 
 # Pepse Game - introduction
-I'll begin by explaining the project structure and the classes that are part of it.
-After that I'll go over who is charge of who in the project and their appropriate relations.
-finally, I'll explain the different choices we made in the project and why we made them.
+We'll begin by explaining the project structure and the classes that are part of it.
+After that We'll go over who is charge of who in the project and their appropriate relations.
+finally, We'll explain the different choices we made in the project and why we made them.
 
 # Project Structure
 The project consists of the following classes:
