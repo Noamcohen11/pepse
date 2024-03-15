@@ -7,6 +7,7 @@ import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 import pepse.Constants;
 import danogl.gui.rendering.AnimationRenderable;
+import pepse.util.EnergyHolder;
 
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
@@ -17,7 +18,7 @@ import java.util.stream.IntStream;
  *
  * @author Noam Cohen and Gilad Omesi
  */
-public class Avatar extends GameObject {
+public class Avatar extends GameObject implements EnergyHolder {
     private static final float VELOCITY_X = 400;
     private static final float VELOCITY_Y = -650;
     private static final float GRAVITY = 600;
@@ -62,6 +63,7 @@ public class Avatar extends GameObject {
         }
         return xVel;
     }
+
     // Update the y velocity of the avatar.
     private void updateVelocityY() {
         if (energy > ENERGY_JUMP_LOSE) {
@@ -80,7 +82,7 @@ public class Avatar extends GameObject {
                         .toArray(Renderable[]::new),
                 1);
         runRenderable = new AnimationRenderable(
-                        Arrays.stream(RUN_IMAGES).map(
+                Arrays.stream(RUN_IMAGES).map(
                                 runImage -> imageReader.readImage(runImage, true))
                         .toArray(Renderable[]::new),
                 1);
@@ -94,15 +96,15 @@ public class Avatar extends GameObject {
     /**
      * Create the avatar.
      *
-     * @param pos The position of the avatar.
+     * @param pos           The position of the avatar.
      * @param inputListener The input listener of the game.
-     * @param imageReader The image reader of the game.
+     * @param imageReader   The image reader of the game.
      */
     public Avatar(Vector2 pos, UserInputListener inputListener, ImageReader imageReader) {
         super(pos, Vector2.ONES.mult(Constants.AVATAR_SIZE),
                 new AnimationRenderable(
                         Arrays.stream(IDLE_IMAGES).map(
-                                idleImage -> imageReader.readImage(idleImage, true))
+                                        idleImage -> imageReader.readImage(idleImage, true))
                                 .toArray(Renderable[]::new),
                         1));
         physics().preventIntersectionsFromDirection(Vector2.ZERO);
@@ -112,6 +114,7 @@ public class Avatar extends GameObject {
         energy = MAX_ENERGY;
         initRenderables();
         direction = LEFT;
+        setTag(Constants.AVATAR_TAG);
     }
 
     /**
@@ -130,18 +133,17 @@ public class Avatar extends GameObject {
         if (getVelocity().x() == 0 && getVelocity().y() == 0) {
             energy += ENERGY_GAIN;
             avatarRender = idleRenderable;
-        }
-        else if (getVelocity().x() != 0) {avatarRender = runRenderable;}
-        else {avatarRender = jumpRenderable;}
-        if (energy > MAX_ENERGY) {energy = MAX_ENERGY; }
+        } else if (getVelocity().x() != 0) { avatarRender = runRenderable;
+        } else {  avatarRender = jumpRenderable; }
+        if (energy > MAX_ENERGY) { energy = MAX_ENERGY;}
         renderer().setRenderable(avatarRender);
-        if (xVel < 0) {direction = RIGHT;}
-        else if (xVel > 0) {direction = LEFT;}
+        if (xVel < 0) { direction = RIGHT;
+        } else if (xVel > 0) { direction = LEFT; }
         renderer().setIsFlippedHorizontally(direction);
     }
 
     /**
-     *  Get the energy of the avatar.
+     * Get the energy of the avatar.
      *
      * @return The energy of the avatar.
      */
@@ -149,7 +151,34 @@ public class Avatar extends GameObject {
         return energy;
     }
 
+    /**
+     * Get the maximum energy of the avatar.
+     *
+     * @return The maximum energy of the avatar.
+     */
+    public float getMaxEnergy() {
+        return MAX_ENERGY;
+    }
+
+    /**
+     * Add energy to the avatar.
+     *
+     * @param addedEnergy The energy to add.
+     */
     public void addEnergy(float addedEnergy) {
-        energy += addedEnergy;
+        if (energy + addedEnergy > MAX_ENERGY) {
+            energy = MAX_ENERGY;
+        } else {
+            energy += addedEnergy;
+        }
+    }
+
+    /**
+     * Lose energy from the avatar.
+     *
+     * @param energy The energy to lose.
+     */
+    public void loseEnergy(float energy) {
+        this.energy -= energy;
     }
 }

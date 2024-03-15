@@ -10,7 +10,7 @@ public class Constants {
     /**
      * What precentage of the window's width the sky takes vs the dirt.
      */
-    public static final float DIRT_SKY_RATIO = 2f/3f;
+    public static final float DIRT_SKY_RATIO = 2f / 3f;
     /**
      * The size of the avatar.
      */
@@ -19,4 +19,14 @@ public class Constants {
      * The folder of the assets.
      */
     public static final String ASSETS_FOLDER = "assets";
+    /**
+     * The tag of the avatar.
+     */
+    public static final String AVATAR_TAG = "avatar";
+
+    /**
+     * The length of the day-night cycle.
+     */
+    public static final int CYCLE_LENGTH = 30;
+
 }

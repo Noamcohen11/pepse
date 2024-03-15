@@ -15,51 +15,60 @@ import java.util.function.Function;
  *
  * @author Noam Cohen and Gilad Omesi.
  */
-public class Flora  {
-    private final Function<Float,Float> GetTreePosition;
+public class Flora {
+    private final Function<Float, Float> GetTreePosition;
     private static final Vector2 TRUNK_DIMENSIONS = new Vector2(Block.SIZE, 300);
-    private static final Color LEAF_COLOR = new Color(50, 200, 30);
     private static final Color TRUNK_COLOR = new Color(100, 50, 20);
     private static final int LEAVES_IN_ROW = 10;
-    private static final float ODDS_OF_TREE = 1f/10;
-    private static final float ODDS_OF_LEAF = 1f/2;
+    private static final float ODDS_OF_TREE = 1f / 10;
+    private static final float ODDS_OF_LEAF = 1f / 2;
+    private static final float ODDS_OF_FRUIT = 1f / 4;
 
+    // Create a tree in a random position.
     private Tree createTree(Vector2 bottomLeftCorner) {
-
         Vector2 trunkTopLeftCorner = new Vector2(
                 bottomLeftCorner.x(),
-                bottomLeftCorner.y() - (TRUNK_DIMENSIONS.y()+Block.SIZE)/2);
+                bottomLeftCorner.y() - (TRUNK_DIMENSIONS.y() + Block.SIZE) / 2);
         Tree tree =
                 new Tree(new Block(trunkTopLeftCorner,
                         new RectangleRenderable(ColorSupplier.approximateColor(TRUNK_COLOR))),
-                        new ArrayList<>());
+                        new ArrayList<>(), new ArrayList<>());
         tree.trunk().setDimensions(TRUNK_DIMENSIONS);
-        // Create a LEAVES_SIZE by LEAVES_SIZE grid of leaves.
+        createTreeLeafsAndFruits(bottomLeftCorner, trunkTopLeftCorner, tree);
+        return tree;
+    }
+
+    // Create a LEAVES_SIZE by LEAVES_SIZE grid of leaves.
+    private static void createTreeLeafsAndFruits(Vector2 bottomLeftCorner, Vector2 trunkTopLeftCorner, Tree tree) {
         Vector2 leafsTopLeftCorner = new Vector2(
                 trunkTopLeftCorner.x() - (Block.SIZE * LEAVES_IN_ROW - TRUNK_DIMENSIONS.x()) / 2,
-                bottomLeftCorner.y()-TRUNK_DIMENSIONS.y() -
-                        (float) (Block.SIZE * LEAVES_IN_ROW) / 2);
+                bottomLeftCorner.y() - TRUNK_DIMENSIONS.y() - (float) (Block.SIZE * LEAVES_IN_ROW) / 2);
         for (int i = 0; i < LEAVES_IN_ROW; i++) {
             for (int j = 0; j < LEAVES_IN_ROW; j++) {
                 if (Math.random() > ODDS_OF_LEAF) {
+                    Vector2 leafTopLeftCorner = new Vector2(
+                            leafsTopLeftCorner.x() + i * Block.SIZE,
+                            leafsTopLeftCorner.y() + j * Block.SIZE);
+                    tree.leaves().add(new Leaf(leafTopLeftCorner));
                     continue;
                 }
-                Vector2 leafTopLeftCorner = new Vector2(
-                        leafsTopLeftCorner.x() + i * Block.SIZE,
-                        leafsTopLeftCorner.y() + j * Block.SIZE);
-                tree.leaves().add(new Block(leafTopLeftCorner,
-                        new RectangleRenderable(ColorSupplier.approximateColor(LEAF_COLOR))));
+                if (Math.random() < ODDS_OF_FRUIT) {
+                    Vector2 fruitTopLeftCorner = new Vector2(
+                            leafsTopLeftCorner.x() + i * Block.SIZE,
+                            leafsTopLeftCorner.y() + j * Block.SIZE);
+                    tree.fruits().add(new Fruit(fruitTopLeftCorner));
+                }
             }
         }
-        return tree;
     }
+
     /**
      * Construct a new flora.
      * This gets the function that supplies the position of a tree.
      *
      * @param GetTreePosition A function of a random position for a tree.
      */
-    public Flora(Function<Float,Float> GetTreePosition) {
+    public Flora(Function<Float, Float> GetTreePosition) {
         this.GetTreePosition = GetTreePosition;
     }
 
@@ -73,12 +82,12 @@ public class Flora  {
     public ArrayList<Tree> createInRange(int minX, int maxX) {
         int statingX = (int) (Math.floor((float) minX / Block.SIZE) * Block.SIZE);
         ArrayList<Tree> trees = new ArrayList<>();
-        for (int x = statingX; x < maxX; x+=Block.SIZE) {
+        for (int x = statingX; x < maxX; x += Block.SIZE) {
             // if random is 1 in 10, create a tree.
             if (Math.random() < ODDS_OF_TREE) {
                 trees.add(createTree(
                         new Vector2(x, GetTreePosition.apply((float) (x)))));
-                x+= Block.SIZE*LEAVES_IN_ROW/2;
+                x += Block.SIZE * LEAVES_IN_ROW / 2;
             }
         }
         return trees;

@@ -20,7 +20,7 @@ public class Block extends GameObject {
      * Create a block.
      *
      * @param topLeftCorner The top left corner of the block.
-     * @param renderable The renderable of the block.
+     * @param renderable    The renderable of the block.
      */
     public Block(Vector2 topLeftCorner, Renderable renderable) {
         super(topLeftCorner, Vector2.ONES.mult(SIZE), renderable);

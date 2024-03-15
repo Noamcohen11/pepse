@@ -25,10 +25,10 @@ public class Night {
      * to simulate the day-night cycle.
      *
      * @param windowDimensions The dimensions of the window.
-     * @param cycleLength The length of the day-night cycle.
+     * @param cycleLength      The length of the day-night cycle.
      * @return The night as a GameObject.
      */
-    public static GameObject create(Vector2 windowDimensions, float cycleLength){
+    public static GameObject create(Vector2 windowDimensions, float cycleLength) {
         GameObject night = new GameObject(
                 Vector2.ZERO, windowDimensions,
                 new RectangleRenderable(Color.BLACK));

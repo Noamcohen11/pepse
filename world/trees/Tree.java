@@ -11,7 +11,8 @@ import java.util.ArrayList;
  */
 public class Tree {
     private final Block trunk;
-    private final ArrayList<Block> leaves;
+    private final ArrayList<Leaf> leaves;
+    private final ArrayList<Fruit> fruits;
 
 
     /**
@@ -20,9 +21,10 @@ public class Tree {
      * @param trunk The trunk of the tree.
      * @param leafs The leaves of the tree.
      */
-    public Tree(Block trunk, ArrayList<Block> leafs) {
+    public Tree(Block trunk, ArrayList<Leaf> leafs, ArrayList<Fruit> fruits) {
         this.trunk = trunk;
         this.leaves = leafs;
+        this.fruits = fruits;
     }
 
     /**
@@ -39,7 +41,16 @@ public class Tree {
      *
      * @return The leaves of the tree.
      */
-    public ArrayList<Block> leaves() {
+    public ArrayList<Leaf> leaves() {
         return leaves;
+    }
+
+    /**
+     * Get the fruits of the tree.
+     *
+     * @return The fruits of the tree.
+     */
+    public ArrayList<Fruit> fruits() {
+        return fruits;
     }
 }
