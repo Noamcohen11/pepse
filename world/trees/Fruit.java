@@ -7,9 +7,10 @@ import danogl.gui.rendering.OvalRenderable;
 import danogl.util.Vector2;
 import pepse.Constants;
 import pepse.util.ColorSupplier;
-import pepse.util.EnergyHolder;
 
 import java.awt.*;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 /**
  * A fruit that can be eaten by the avatar.
@@ -20,7 +21,7 @@ public class Fruit extends GameObject {
     private static final int SIZE = 20;
     private static final int ENERGY_GAIN = 10;
     private boolean isActive = true;
-    private EnergyHolder AVATAR_OBSERVER;
+    private PropertyChangeSupport support;
 
     /**
      * Create a Fruit.
@@ -31,7 +32,11 @@ public class Fruit extends GameObject {
         super(topLeftCorner, Vector2.ONES.mult(SIZE), new OvalRenderable(ColorSupplier.approximateColor(FRUIT_COLOR)));
 
         this.setTag(TAG);
-        AVATAR_OBSERVER = null;
+        support = new PropertyChangeSupport(this);
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        support.addPropertyChangeListener(pcl);
     }
 
     /**
@@ -46,9 +51,7 @@ public class Fruit extends GameObject {
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
         if (other.getTag().equals(Constants.AVATAR_TAG) && isActive) {
-            if (AVATAR_OBSERVER != null) {
-                AVATAR_OBSERVER.addEnergy(ENERGY_GAIN);
-            }
+            support.firePropertyChange("FruitEaten", null, null);
             this.hideFruit();
         }
     }
@@ -64,14 +67,5 @@ public class Fruit extends GameObject {
         isActive = false;
         this.renderer().setRenderable(null);
         new ScheduledTask(this, Constants.CYCLE_LENGTH, true, this::showFruit);
-    }
-
-    /**
-     * Set the avatar observer.
-     *
-     * @param observer The avatar observer.
-     */
-    public void setAvatarObserver(EnergyHolder observer) {
-        AVATAR_OBSERVER = observer;
     }
 }

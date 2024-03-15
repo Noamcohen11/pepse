@@ -7,18 +7,19 @@ import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 import pepse.Constants;
 import danogl.gui.rendering.AnimationRenderable;
-import pepse.util.EnergyHolder;
 
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
 import java.util.Arrays;
 import java.util.stream.IntStream;
+import java.beans.PropertyChangeListener;
 
 /**
  * The avatar of the game.
  *
  * @author Noam Cohen and Gilad Omesi
  */
-public class Avatar extends GameObject implements EnergyHolder {
+public class Avatar extends GameObject implements PropertyChangeListener {
     private static final float VELOCITY_X = 400;
     private static final float VELOCITY_Y = -650;
     private static final float GRAVITY = 600;
@@ -133,12 +134,20 @@ public class Avatar extends GameObject implements EnergyHolder {
         if (getVelocity().x() == 0 && getVelocity().y() == 0) {
             energy += ENERGY_GAIN;
             avatarRender = idleRenderable;
-        } else if (getVelocity().x() != 0) { avatarRender = runRenderable;
-        } else {  avatarRender = jumpRenderable; }
-        if (energy > MAX_ENERGY) { energy = MAX_ENERGY;}
+        } else if (getVelocity().x() != 0) {
+            avatarRender = runRenderable;
+        } else {
+            avatarRender = jumpRenderable;
+        }
+        if (energy > MAX_ENERGY) {
+            energy = MAX_ENERGY;
+        }
         renderer().setRenderable(avatarRender);
-        if (xVel < 0) { direction = RIGHT;
-        } else if (xVel > 0) { direction = LEFT; }
+        if (xVel < 0) {
+            direction = RIGHT;
+        } else if (xVel > 0) {
+            direction = LEFT;
+        }
         renderer().setIsFlippedHorizontally(direction);
     }
 
@@ -149,15 +158,6 @@ public class Avatar extends GameObject implements EnergyHolder {
      */
     public float getEnergy() {
         return energy;
-    }
-
-    /**
-     * Get the maximum energy of the avatar.
-     *
-     * @return The maximum energy of the avatar.
-     */
-    public float getMaxEnergy() {
-        return MAX_ENERGY;
     }
 
     /**
@@ -174,11 +174,15 @@ public class Avatar extends GameObject implements EnergyHolder {
     }
 
     /**
-     * Lose energy from the avatar.
+     * Set the energy of the avatar.
      *
-     * @param energy The energy to lose.
+     * @param evt A PropertyChangeEvent object describing the event source
+     *            and the property that has changed.
      */
-    public void loseEnergy(float energy) {
-        this.energy -= energy;
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if ("FruitEaten".equals(evt.getPropertyName())) {
+            addEnergy(10);
+        }
     }
 }

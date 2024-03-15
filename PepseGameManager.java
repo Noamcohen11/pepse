@@ -7,7 +7,6 @@ import danogl.gui.*;
 
 import danogl.util.Vector2;
 import pepse.ui.EnergyUi;
-import pepse.util.EnergyHolder;
 import pepse.world.Avatar;
 import pepse.world.Block;
 import pepse.world.Sky;
@@ -52,7 +51,7 @@ public class PepseGameManager extends GameManager {
     }
 
     // Create the flora
-    private void createFlora(WindowController windowController, EnergyHolder avatar) {
+    private void createFlora(WindowController windowController, Avatar avatar) {
         // Create the flora
         Flora flora = new Flora(terrain::groundHeightAt);
         for (Tree tree : flora.createInRange(TREE_ZONE_START, (int) windowController.getWindowDimensions().x())) {
@@ -61,7 +60,7 @@ public class PepseGameManager extends GameManager {
                 this.gameObjects().addGameObject(leaf, Layer.FOREGROUND);
             }
             for (Fruit fruit : tree.fruits()) {
-                fruit.setAvatarObserver(avatar);
+                fruit.addPropertyChangeListener(avatar);
                 this.gameObjects().addGameObject(fruit, Layer.DEFAULT);
             }
         }
