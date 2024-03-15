@@ -1,0 +1,56 @@
+gilad.omesi,noam.cohen11
+319011961,318776739
+
+# Pepse Game - introduction
+I'll begin by explaining the project structure and the classes that are part of it.
+After that I'll go over who is charge of who in the project and their appropriate relations.
+finally, I'll explain the different choices we made in the project and why we made them.
+
+# Project Structure
+The project consists of the following classes:
+1. **PepseGameManager** - The main class of the project, responsible for running the program.
+This class extends the GameManager class, which is a part of the game engine.
+
+2. **Constants** - A class that contains all the constants used in the project.
+
+3. **ui** - A package that contains the EnergyUi
+    3.1. **EnergyUi** - A class that is responsible for showing the user the current energy level of the player.
+
+4. **util** - A package that contains color and noise classes.
+    4.1. **ColorSupplier** - A class that is used to generate random colors.
+    4.2. **NoiseGenerator** - A class that is used to generate random noise for the terrain.
+
+5. **world** - A package that contains all the elements of the game world.
+    5.1. **Terrain** - A class that is responsible for generating the terrain of the game.
+    5.2. **Sky** - A class that is responsible for generating the sky of the game.
+    5.3. **Block** - A class that is responsible for generating the blocks of the game.
+    Used for the terrain, leaves and the tree trunk.
+    5.4. **Avatar** - A class that is responsible for generating the avatar of the game.
+
+    5.5. **daynight** - A package that contains the DayNightCycle class.
+        5.5.1. **Night** - A class that is responsible for covering the screen with a black overlay when it is night.
+        5.5.2. **Sun** - A class that is responsible for generating the sun of the game.
+        5.5.3. **SunHalo** - A class that is responsible for generating the sun halo of the game.
+
+    5.6. **trees** - A package that contains every thing tree related.
+        5.6.1. **Leaf** - A class that represent the leaves of the tree.
+        5.6.2. **Tree** - A class that represent the tree, with it's trunk, leaves and fruits.
+        5.6.3. **Fruit** - A class that represent the fruit of the tree.
+        5.6.4. **Flora** - A class that is responsible for generating a bunch of trees with their fruits and
+        leaves
+
+# Who is in charge of who and their relations
+the PepseGameManager class is responsible for running the game, and creating the avatar, terrain, sky,
+ day-night cycle, avatar, and the flora. It also contains the main method of the project.
+The Flora is responsible for generating a bunch of trees.
+Tree contains the trunk, leaves, and fruits, and is responsible for generating them.
+The SunHalo is responsible for generating the sun halo, it sets it's location as the sun's location.
+
+# Choices and reasons
+When we made the different choices in the project we tried to keep the code as clean and organized as possible.
+We used callback in the transition between day and night, in the avatar animations, and in the leaves movement
+Additionally, we used the observer pattern to notify the avatar when an fruit is consumed.
+We also used the observer pattern to notify trees, leaves, and fruits when the user jumps.
+In rectangle game objects such as trunk, leaves, and the terrain, we used the inheritance pattern to avoid
+code duplication.
+We used the factory pattern to generate the trees as their location is complex

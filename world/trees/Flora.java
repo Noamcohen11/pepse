@@ -2,7 +2,6 @@ package pepse.world.trees;
 
 import danogl.util.Vector2;
 import pepse.Constants;
-import pepse.world.Block;
 
 import java.util.ArrayList;
 import java.util.function.Function;
