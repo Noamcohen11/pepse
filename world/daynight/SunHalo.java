@@ -14,7 +14,7 @@ public class SunHalo {
     private static final float SIZE = 200;
     private static final Color HALO_COLOR = new Color(255, 255, 0, 20);
 
-    /*
+    /**
      * Create the halo of the sun.
      *
      * @param sun The sun around which the halo is created.
