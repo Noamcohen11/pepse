@@ -84,7 +84,8 @@ public class Fruit extends GameObject implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (Constants.AVATAR_JUMP_EVENT.equals(evt.getPropertyName()) && isActive) {
-            this.renderer().setRenderable(new OvalRenderable(ColorSupplier.approximateColor(BASIC_FRUIT_COLOR, 30)));
+            this.renderer().setRenderable(new OvalRenderable(
+                    ColorSupplier.approximateColor(BASIC_FRUIT_COLOR, 30)));
         }
     }
 

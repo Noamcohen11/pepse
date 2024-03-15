@@ -61,7 +61,8 @@ public class Terrain {
         int statingX = (int) (Math.floor((float) minX / Constants.BLOCK_SIZE) * Constants.BLOCK_SIZE);
         List<Block> blocks = new ArrayList<>();
         for (int x = statingX; x < maxX; x += Constants.BLOCK_SIZE) {
-            float statingY = (float) (Math.floor(groundHeightAt(x) / Constants.BLOCK_SIZE) * Constants.BLOCK_SIZE);
+            float statingY = (float) (Math.floor(groundHeightAt(x) /
+                    Constants.BLOCK_SIZE) * Constants.BLOCK_SIZE);
             for (float y = statingY;
                  y < statingY + TERRAIN_DEPTH * Constants.BLOCK_SIZE; y += Constants.BLOCK_SIZE) {
                 Block dirt = new Block(new Vector2(x, y),

@@ -47,10 +47,13 @@ public class Tree implements PropertyChangeListener {
         createTreeLeafsAndFruits(bottomLeftCorner, bottomLeftCorner, this);
     }
 
-    private static void createTreeLeafsAndFruits(Vector2 bottomLeftCorner, Vector2 trunkTopLeftCorner, Tree tree) {
+    private static void createTreeLeafsAndFruits(Vector2 bottomLeftCorner,
+                                                 Vector2 trunkTopLeftCorner, Tree tree) {
         Vector2 leafsTopLeftCorner = new Vector2(
-                trunkTopLeftCorner.x() - (Constants.BLOCK_SIZE * Constants.LEAVES_IN_ROW - TRUNK_DIMENSIONS.x()) / 2,
-                bottomLeftCorner.y() - TRUNK_DIMENSIONS.y() - (float) (Constants.BLOCK_SIZE * Constants.LEAVES_IN_ROW) / 2);
+                trunkTopLeftCorner.x() - (Constants.BLOCK_SIZE *
+                        Constants.LEAVES_IN_ROW - TRUNK_DIMENSIONS.x()) / 2,
+                bottomLeftCorner.y() - TRUNK_DIMENSIONS.y() - (float)
+                        (Constants.BLOCK_SIZE * Constants.LEAVES_IN_ROW) / 2);
         for (int i = 0; i < Constants.LEAVES_IN_ROW; i++) {
             for (int j = 0; j < Constants.LEAVES_IN_ROW; j++) {
                 if (Math.random() > ODDS_OF_LEAF) {

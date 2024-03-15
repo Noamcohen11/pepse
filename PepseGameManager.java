@@ -54,7 +54,8 @@ public class PepseGameManager extends GameManager {
     private void createFlora(WindowController windowController, Avatar avatar) {
         // Create the flora
         Flora flora = new Flora(terrain::groundHeightAt);
-        for (Tree tree : flora.createInRange(TREE_ZONE_START, (int) windowController.getWindowDimensions().x())) {
+        for (Tree tree : flora.createInRange(TREE_ZONE_START, (int)
+                windowController.getWindowDimensions().x())) {
             avatar.addPropertyChangeListener(tree);
             this.gameObjects().addGameObject(tree.trunk(), Layer.STATIC_OBJECTS);
             for (Leaf leaf : tree.leaves()) {
