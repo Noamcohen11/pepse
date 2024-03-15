@@ -37,14 +37,14 @@ public class Terrain {
      * @return The height of the ground at the given x coordinate.
      */
     public float groundHeightAt(float x) {
-        float noise = (float) noiseGenerator.noise(x, Block.SIZE *NOISE_FACOTR);
+        float noise = (float) noiseGenerator.noise(x, Constants.BLOCK_SIZE *NOISE_FACOTR);
         // print the noise
         return groundHeightAtX0 + noise; }
 
     /**
      * Create the terrain in the given range.
-     * The terrain is created with blocks that are Block.size wide.
-     * so the range is divided into blocks of size Block.size, and if it can be divided evenly,
+     * The terrain is created with blocks that are BLOCK_SIZE wide.
+     * so the range is divided into blocks of size BLOCK_SIZE, and if it can be divided evenly,
      * we will create the blocks before the minX and after the maxX.
      *
      * @param minX The minimum x coordinate that terrain must be created in.
@@ -53,12 +53,12 @@ public class Terrain {
      */
     public List<Block> createInRange(int minX, int maxX) {
 
-        int statingX = (int) (Math.floor((float) minX / Block.SIZE) * Block.SIZE);
+        int statingX = (int) (Math.floor((float) minX / Constants.BLOCK_SIZE) * Constants.BLOCK_SIZE);
         List<Block> blocks = new ArrayList<>();
-        for (int x = statingX; x < maxX; x += Block.SIZE) {
-            float statingY = (float)(Math.floor(groundHeightAt(x) / Block.SIZE) * Block.SIZE);
+        for (int x = statingX; x < maxX; x += Constants.BLOCK_SIZE) {
+            float statingY = (float)(Math.floor(groundHeightAt(x) / Constants.BLOCK_SIZE) * Constants.BLOCK_SIZE);
             for (float y = statingY;
-                 y < statingY + TERRAIN_DEPTH*Block.SIZE; y += Block.SIZE) {
+                 y < statingY + TERRAIN_DEPTH*Constants.BLOCK_SIZE; y += Constants.BLOCK_SIZE) {
                 Block dirt = new Block(new Vector2(x, y),
                         new RectangleRenderable(ColorSupplier.approximateColor(BASE_GROUND_COLOR)));
                 dirt.setTag(BLOCK_TAG);

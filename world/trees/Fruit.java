@@ -21,6 +21,7 @@ public class Fruit extends GameObject implements PropertyChangeListener {
     private static final int SIZE = 20;
     private boolean isActive = true;
     private final PropertyChangeSupport support;
+    private final Color BASIC_FRUIT_COLOR = new Color(166, 234, 63);
 
     /**
      * Create a Fruit.
@@ -29,7 +30,7 @@ public class Fruit extends GameObject implements PropertyChangeListener {
      */
     public Fruit(Vector2 topLeftCorner) {
         super(topLeftCorner, Vector2.ONES.mult(SIZE),
-                new OvalRenderable(ColorSupplier.approximateColor(Color.RED)));
+                new OvalRenderable(ColorSupplier.approximateColor(Color.GREEN)));
 
         this.setTag(Constants.FRUIT_TAG);
         support = new PropertyChangeSupport(this);
@@ -64,7 +65,7 @@ public class Fruit extends GameObject implements PropertyChangeListener {
     // Show the fruit
     private void showFruit() {
         isActive = true;
-        this.renderer().setRenderable(new OvalRenderable(ColorSupplier.approximateColor(getRandomFruitColor())));
+        this.renderer().setRenderable(new OvalRenderable(ColorSupplier.approximateColor(BASIC_FRUIT_COLOR)));
     }
 
     // Hide the fruit for a certain time.
@@ -84,26 +85,8 @@ public class Fruit extends GameObject implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (Constants.AVATAR_JUMP_EVENT.equals(evt.getPropertyName()) && isActive) {
-            this.renderer().setRenderable(new OvalRenderable(ColorSupplier.approximateColor(getRandomFruitColor())));
+            this.renderer().setRenderable(new OvalRenderable(ColorSupplier.approximateColor(BASIC_FRUIT_COLOR, 30)));
         }
     }
 
-    // Get a random color for the fruit.
-    private Color getRandomFruitColor() {
-        Random random = new Random();
-        boolean isRedApple = random.nextBoolean();
-
-        int red, green, blue;
-
-        if (isRedApple) {
-            red = 100 + random.nextInt(156);
-            green = 50 + random.nextInt(206);
-        } else {
-            red = 50 + random.nextInt(151);
-            green = 150 + random.nextInt(106);
-        }
-        blue = random.nextInt(51);
-
-        return new Color(red, green, blue);
-    }
 }

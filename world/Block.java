@@ -15,7 +15,7 @@ public class Block extends GameObject {
     /**
      * The size of the block.
      */
-    public static final int SIZE = 30;
+    public static final int SIZE = Constants.BLOCK_SIZE;
 
     /**
      * Create a block.

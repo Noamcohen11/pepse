@@ -28,7 +28,7 @@ import pepse.world.trees.Tree;
 public class PepseGameManager extends GameManager {
 
     private static final int ENERGY_UI_SIZE = 50;
-    private static final int TREE_ZONE_START = Constants.AVATAR_SIZE + 3 * Block.SIZE;
+    private static final int TREE_ZONE_START = Constants.AVATAR_SIZE + 3 * Constants.BLOCK_SIZE;
     private Terrain terrain;
 
     // Create the terrain

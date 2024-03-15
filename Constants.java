@@ -16,6 +16,10 @@ public class Constants {
      */
     public static final int AVATAR_SIZE = 50;
     /**
+     * The size of the block.
+     */
+    public static final int BLOCK_SIZE = 30;
+    /**
      * The folder of the assets.
      */
     public static final String ASSETS_FOLDER = "assets";
@@ -48,4 +52,8 @@ public class Constants {
      * Event that is fired when the avatar jumps.
      */
     public static final String AVATAR_JUMP_EVENT = "avatarJump";
+    /**
+     * The number of leaves to create in a row in a tree.
+     */
+    public static final int LEAVES_IN_ROW = 10;
 }

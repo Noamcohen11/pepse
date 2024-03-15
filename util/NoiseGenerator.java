@@ -1,13 +1,9 @@
 package pepse.util;
 
-import java.util.Random;
-
 public class NoiseGenerator {
-    private double seed;
-    private long default_size;
+    private final double seed;
     private int[] p;
-    private int[] permutation;
-    private double startPoint;
+    private final double startPoint;
 
     /**
      * The constructor of the NoiseGenerator class.
@@ -30,7 +26,7 @@ public class NoiseGenerator {
     private void init() {
         // Initialize the permutation array.
         this.p = new int[512];
-        this.permutation = new int[]{151, 160, 137, 91, 90, 15, 131, 13, 201,
+        int[] permutation = new int[]{151, 160, 137, 91, 90, 15, 131, 13, 201,
                 95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 69, 142, 8, 99,
                 37, 240, 21, 10, 23, 190, 6, 148, 247, 120, 234, 75, 0, 26,
                 197, 62, 94, 252, 219, 203, 117, 35, 11, 32, 57, 177, 33, 88,
@@ -50,13 +46,11 @@ public class NoiseGenerator {
                 84, 204, 176, 115, 121, 50, 45, 127, 4, 150, 254, 138, 236,
                 205, 93, 222, 114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66,
                 215, 61, 156, 180};
-        this.default_size = 35;
 
         // Populate it
         for (int i = 0; i < 256; i++) {
             p[256 + i] = p[i] = permutation[i];
         }
-
     }
 
     /**
@@ -65,7 +59,6 @@ public class NoiseGenerator {
      * @param x the wanted x to receive noise for (in our case, the x coordinate of the terrain you'd want to create).
      * @param factor describes how large the noise should be (play with it, but BLOCK_SIZE *7 should be enough).
      * @return returns a noise you should *add* to the groundHeightAtX0 you have.
-     *
      * example:
      * public float groundHeightAt(float x) {
      *           float noise = (float) noiseGenerator.noise(x, BLOCK_SIZE *7);
